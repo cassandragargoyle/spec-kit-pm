@@ -1,0 +1,33 @@
+# Per-organisation identity profile for spec-kit-pm.
+#
+# Consulted by the PM agent's authoring-party inference (see agents/pm.md →
+# Authoring-party inference) when a developer's CLAUDE.local.md `Organisation`
+# field matches `organisation` or any entry in `legal_names`.
+#
+# Adopting orgs: copy this directory to `profiles/<your-org>/`, edit, commit.
+# Multiple per-org profiles MAY coexist in `profiles/`; the agent selects at
+# most one based on the developer's identity and never merges competing
+# profiles.
+
+# Canonical organisation name used for matching.
+organisation: Acme Smart Living s.r.o.
+
+# Aliases under which the same organisation may be named in source authorities
+# (contracts, MoUs, mandates). Used for fuzzy matching against the developer's
+# `Organisation` from CLAUDE.local.md and against named Parties in a Charter's
+# `source_authority` field.
+legal_names:
+  - Acme Smart Living s.r.o.
+  - Acme Smart Living
+  - Acme
+
+# Optional: org-wide default for `authoring_party`. Used only as the
+# `Default authoring_party` fallback when no contract-side match is possible
+# (e.g. internal projects, or third-party PM scenarios). A successful
+# contract-side match always wins over this default.
+default_authoring_party: supplier   # one of: customer | supplier | internal | joint
+
+# Optional: default value the agent MAY propose (with a visible inference
+# marker) for the Charter's `sponsor` field when this profile is loaded. The
+# user reviews and edits before sign-off.
+sponsor_default: Acme VP of Delivery

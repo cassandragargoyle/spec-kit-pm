@@ -195,6 +195,8 @@ Use **`/specpm.init`** to draft the Charter against [`templates/project/charter.
 /specpm.init Initiate project from contract examples/contracts/smart-home-installation-contract.md. Project Manager: Jane Doe <jane@acme.example>. Sponsor: Acme VP of Operations.
 ```
 
+**Reduce friction (optional):** Before initiating, populate a personal `CLAUDE.local.md` *Identity* block (`Name`, `Email`, `Organisation`) and — if your organisation has customised the kit — a per-org `profiles/<your-org>/identity.yml`. The Initiation gate will then auto-propose `authoring_party`, `project_manager`, and (when an org profile is loaded) `sponsor` instead of asking you. See [`CLAUDE.md`](CLAUDE.md) → *Per-developer Identity* and [`profiles/example-company/identity.yml`](profiles/example-company/identity.yml) for the schemas. The file `CLAUDE.local.md` is gitignored — never committed.
+
 Result: `specs/project/<project-id>/project.md` with `status: active`. Only then may the iterative loop begin.
 
 ---
@@ -294,6 +296,8 @@ git remote add upstream https://github.com/CassandraGargoyle/spec-kit-pm.git
 git fetch upstream
 git rebase upstream/main
 ```
+
+After forking, copy [`profiles/example-company/identity.yml`](profiles/example-company/identity.yml) to `profiles/<your-org>/identity.yml` and edit it to register your organisation's legal-name aliases, default authoring party, and default sponsor. The PM agent's authoring-party inference reads this file (see [`agents/pm.md`](agents/pm.md) → *Authoring-party inference*) and uses it to fill Charter fields automatically when a developer's `CLAUDE.local.md` *Identity* block matches.
 
 ---
 

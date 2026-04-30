@@ -73,6 +73,26 @@ Rules:
 
 Use the format `TODO:NNN [INITIALS]: description` with per-file sequential numbering (001, 002, 003, …). Use `TODO:XXX [INITIALS]: …` as a temporary placeholder when the next number is not yet known.
 
+## Per-developer Identity
+
+The PM agent's authoring-party inference (and other Initiation-time conveniences) consults a personal Identity record that lives in your **`CLAUDE.local.md`** at the repository root (gitignored — never committed). Add an `## Identity` block with the following bullets:
+
+```markdown
+## Identity
+
+- **Name:** Jane Doe
+- **Email:** jane.doe@acme.example
+- **Organisation:** Acme Smart Living s.r.o.
+- **Position:** Senior Project Manager        # optional
+- **Default authoring_party:** supplier       # optional; only used when no contract-side match is possible
+```
+
+Required for inference: `Name`, `Email`, `Organisation`. Optional: `Position`, `Default authoring_party`. The file MUST remain gitignored (the kit's root `.gitignore` already excludes it). Absence of the file is legal — the Initiation gate falls back to asking the user. Inference is opportunistic, not load-bearing.
+
+For org-level metadata (legal-name aliases, default sponsor, default authoring party) shared across all developers in your organisation, add a per-org profile at `profiles/<your-org>/identity.yml`. See [`profiles/example-company/identity.yml`](profiles/example-company/identity.yml) for the schema and a worked example.
+
+The full inference algorithm and the role-label → enum mapping live in [`agents/pm.md`](agents/pm.md) → *Authoring-party inference*.
+
 ## Per-developer Display Language
 
 Everything **persisted** is always English (see *Language* above). What each developer *sees on screen* — AI assistant chat replies, CLI status messages, interactive prompts — may be set to their preferred language individually:

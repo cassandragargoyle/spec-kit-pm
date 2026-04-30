@@ -24,17 +24,45 @@ If any of these conditions is not satisfied, **stop** producing the requested ar
 2. Mark each missing field with `<<TO FILL>>`.
 3. Ask the requester for the missing information before continuing.
 
-For check (4) specifically, before asking the agent SHOULD attempt inference:
-
-- If `source_authority` unambiguously names a single organisation with no counterparty (e.g. an internal OKR, board minutes of the authoring org), the agent MAY auto-fill `authoring_party: internal`.
-- If a user-identity record is available and the user's organisation matches exactly one named Party of `source_authority`, the agent MAY auto-fill the corresponding value (`customer` or `supplier`) and SHOULD record a visible inference marker so a human reviewer can confirm it.
-- Otherwise — and especially when `source_authority` names two or more distinct Parties and inference is unavailable or ambiguous — the agent MUST ask which Party (`customer`, `supplier`, `internal`, `joint`) is authoring this Charter.
+For check (4) specifically, before asking the agent MUST run the [Authoring-party inference](#authoring-party-inference) algorithm. If inference yields a single unambiguous match the agent auto-fills `authoring_party` with a visible inference marker; otherwise it falls back to asking. The agent MUST NOT auto-fill silently — every inferred value carries a marker so the user can review and override.
 
 You MUST NOT silently invent a Project ID, Project Manager, Sponsor, source authority, authoring party, or artifact directory. The Initiation gate exists precisely to prevent that failure mode.
 
 **Sponsor and Project Manager SHOULD be drawn from the authoring Party.** The kit does not enforce this mechanically because it has no parseable representation of which Party each person belongs to; the convention is observed in the Charter body (Stakeholders section) and reviewed by humans. Charters that violate it SHOULD be flagged for review.
 
 See [`workflows/project-initiation.md`](../workflows/project-initiation.md) for the full Initiation workflow.
+
+## Authoring-party inference
+
+When the [preflight](#preflight-initiation-gate) finds `authoring_party` missing or invalid, the agent MUST run the following six-step algorithm before falling back to asking the user. Inference is opportunistic — no match is a legitimate outcome (e.g. third-party PMs, internal facilitators) and triggers the fallback in step 6.
+
+1. **Explicit value wins.** If `authoring_party` is already set in the Charter front-matter and is a valid enum value (`customer`, `supplier`, `internal`, `joint`), use it. No inference.
+2. **Read user identity.** Load the `## Identity` block from `CLAUDE.local.md` at the repository root (see [`CLAUDE.md`](../CLAUDE.md) → *Per-developer Identity*). If absent, or missing any of `Name`, `Email`, `Organisation`, skip to step 6.
+3. **Honour explicit override.** If the Identity block contains `Default authoring_party`, propose that value with the marker `# inferred from CLAUDE.local.md (Default authoring_party)` and confirm with the user before committing. The default is only used when no contract-side match is possible — a successful step-5 match always wins.
+4. **Match against source authority.** Identify the named Parties in the Charter's `source_authority` field. Match the user's `Organisation` against each Party. Matching MAY use a per-org profile's `legal_names` aliases (see [`profiles/example-company/identity.yml`](../profiles/example-company/identity.yml) for the schema) for fuzzy matching — e.g. *"Acme"* matching *"Acme Smart Living s.r.o."*.
+5. **Map role to enum.** When exactly one Party matches, map that Party's role label (in any language used by the source authority) to the `authoring_party` enum:
+
+   | Role labels (case-insensitive, language-agnostic) | `authoring_party` |
+   | --- | --- |
+   | Zhotovitel, Dodavatel, Contractor, Supplier, Vendor, Provider, Seller | `supplier` |
+   | Objednatel, Klient, Customer, Client, Buyer, Purchaser | `customer` |
+   | Partner, Member, Participant (in MoU / consortium contexts) | `joint` |
+
+   Auto-fill `authoring_party` with the mapped value and add the marker `# inferred from CLAUDE.local.md (organisation match → <role label>)`.
+6. **Fallback: ask.** If `CLAUDE.local.md` is absent, the required Identity fields are missing, no Party matches, or multiple Parties match, fall back to the preflight's standard refusal: produce a Charter draft with `authoring_party: <<TO FILL>>` and ask the user which Party (`customer` / `supplier` / `internal` / `joint`) is authoring the Charter. The agent MAY also auto-fill `authoring_party: internal` (with a visible marker) when `source_authority` unambiguously names a single organisation with no counterparty (e.g. an internal OKR, board minutes of the authoring org).
+
+**Per-org profile selection.** When a per-org profile is consulted in step 4 or step 5, the agent MUST select **at most one** profile from `profiles/` — the one whose `organisation` (or any of its `legal_names`) matches the developer's `Organisation`. Profiles MUST NEVER be merged.
+
+### Auxiliary inferences
+
+When step 5 succeeds, the agent MAY (not MUST) additionally propose, with the same visible-marker discipline:
+
+- `project_manager.name = <Identity.Name>`, `project_manager.email = <Identity.Email>` — the user is the natural default PM for their own request. Marker: `# inferred from CLAUDE.local.md (Identity)`.
+- `sponsor = <profile.sponsor_default>` when a per-org profile is loaded and provides this field. Marker: `# inferred from profiles/<org>/identity.yml (sponsor_default)`.
+
+The agent MUST NOT auto-fill these silently. The user reviews and edits every inferred value before flipping `status: active`. These auxiliary inferences are conveniences — they may be wrong (the user may be inviting a colleague to be PM, or proposing a different sponsor for this specific project). The visible marker exists precisely so the user can spot and correct them.
+
+Stakeholders auto-population is explicitly **out of scope** for this inference layer; populate the Stakeholders table manually following the [Charter template](../templates/project/charter.md) → *Stakeholders convention*.
 
 ## Inputs
 

@@ -1,0 +1,4 @@
+# Personal per-developer config (see CLAUDE.md → Per-developer Identity and
+# Per-developer Display Language). Contains name, email, organisation, and
+# optionally a default authoring_party — never commit.
+CLAUDE.local.md
