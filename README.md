@@ -97,7 +97,7 @@ spec-kit-pm/
 ### 1. Install the Specpm CLI
 
 > **Status:** the `specpm` CLI is **planned** — see [Roadmap](#-roadmap). The commands in this section are the **specified UX** that will work once the CLI ships. Until then, use *Option 3: Manual setup* below.
-
+>
 > **Important:** the only official, maintained packages for spec-kit-pm are published from this GitHub repository. Always install directly from GitHub as shown below.
 
 Choose your preferred installation method:
@@ -185,7 +185,21 @@ For environments without access to PyPI or GitHub, build a portable wheel bundle
 
 ---
 
-### 2. Establish project context
+### 2. Initiate the project (Initiation gate)
+
+Every project MUST pass the **Initiation gate** before any planning artifact is produced. The gate produces a [Project Charter](templates/project/charter.md) at `specs/project/<project-id>/project.md` that records the source authority, a single named Project Manager, the Sponsor, and the artifact directory.
+
+Use **`/specpm.init`** to draft the Charter against [`templates/project/charter.md`](templates/project/charter.md). The agent will refuse to skip this step — see [`agents/pm.md`](agents/pm.md) (preflight) and the [project-initiation workflow](workflows/project-initiation.md).
+
+```text
+/specpm.init Initiate project from contract examples/contracts/smart-home-installation-contract.md. Project Manager: Jane Doe <jane@acme.example>. Sponsor: Acme VP of Operations.
+```
+
+Result: `specs/project/<project-id>/project.md` with `status: active`. Only then may the iterative loop begin.
+
+---
+
+### 3. Establish project context
 
 Use the **`/specpm.spec`** command in your AI agent to draft the project specification — context, goals, scope, constraints, success criteria. Focus on **why** and **what**, not on tasks.
 
@@ -195,7 +209,7 @@ Use the **`/specpm.spec`** command in your AI agent to draft the project specifi
 
 ---
 
-### 3. Generate the plan
+### 4. Generate the plan
 
 Use **`/specpm.plan`** to turn the spec into an actionable plan — tasks, milestones, dependencies, owners.
 
@@ -205,7 +219,7 @@ Use **`/specpm.plan`** to turn the spec into an actionable plan — tasks, miles
 
 ---
 
-### 4. Identify risks and decisions
+### 5. Identify risks and decisions
 
 Use **`/specpm.risks`** to produce a risk register and **`/specpm.decisions`** to log architecture / approach decisions in ADR style.
 
@@ -216,9 +230,9 @@ Use **`/specpm.risks`** to produce a risk register and **`/specpm.decisions`** t
 
 ---
 
-### 5. Review
+### 6. Review
 
-Use **`/specpm.review`** to have the reviewer agent check spec, plan, and risks for completeness, consistency, and unstated assumptions.
+Use **`/specpm.review`** to have the reviewer agent check Charter, spec, plan, and risks for completeness, consistency, and unstated assumptions.
 
 ```text
 /specpm.review
@@ -226,13 +240,17 @@ Use **`/specpm.review`** to have the reviewer agent check spec, plan, and risks 
 
 ---
 
-### 6. Report and iterate
+### 7. Report and iterate
 
 Use **`/specpm.report`** to generate stakeholder-ready progress reports, then loop:
 
 ```text
-Spec → AI Plan → Execution → Validation → Update Spec
+[Initiation gate]  →  Spec  →  AI Plan  →  Execution  →  Validation  →  Update Spec
+                       ▲                                                    │
+                       └────────────────────────────────────────────────────┘
 ```
+
+`Initiation` runs **once per project**; the iterative loop runs many times within an initiated project.
 
 ---
 
@@ -300,6 +318,7 @@ spec-kit-pm:
 ## 📈 Example Workflow
 
 ```text
+0. Initiation gate — Charter signed off (once per project)
 1. Define project spec
 2. AI generates:
    - plan
@@ -307,7 +326,7 @@ spec-kit-pm:
    - tasks
 3. Team executes
 4. AI reports progress
-5. Update spec
+5. Update spec → loop back to 1
 ```
 
 ---

@@ -7,8 +7,8 @@ The recurring loop: Spec → AI Plan → Execution → Validation → Update Spe
 ## Steps
 
 1. TBD
-1. TBD
-1. TBD
+2. TBD
+3. TBD
 
 ## Inputs
 

@@ -22,10 +22,10 @@ Gantt charts in this project **must** be authored in [Mermaid](https://mermaid.j
 Every Gantt chart in this repository should include:
 
 1. `title` — what the timeline represents
-1. `dateFormat` — explicit, ISO-style (`YYYY-MM-DD`) preferred
-1. At least one `section` grouping related tasks
-1. Stable task IDs for tasks referenced by `after` dependencies
-1. Status markers (`done`, `active`, `crit`) where applicable
+2. `dateFormat` — explicit, ISO-style (`YYYY-MM-DD`) preferred
+3. At least one `section` grouping related tasks
+4. Stable task IDs for tasks referenced by `after` dependencies
+5. Status markers (`done`, `active`, `crit`) where applicable
 
 ## Template
 
