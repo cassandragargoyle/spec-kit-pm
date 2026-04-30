@@ -6,7 +6,7 @@
 
 ---
 
-## 🚀 Overview
+## Overview
 
 **spec-kit-pm** is a lightweight, extensible framework for managing projects through **structured specifications instead of ad-hoc task management**.
 
@@ -18,7 +18,7 @@ It is designed for the AI era, where:
 
 ---
 
-## 🧠 Core Principles
+## Core Principles
 
 * **Context over tasks**
   Define *why* and *what*, not just *what to do*
@@ -37,9 +37,9 @@ It is designed for the AI era, where:
 
 ---
 
-## 📦 What’s Included
+## What’s Included
 
-* 📄 **Templates**
+* **Templates**
 
   * Project spec
   * Roadmap
@@ -47,27 +47,27 @@ It is designed for the AI era, where:
   * Decision log (ADR-like)
   * KPI / success metrics
 
-* 🤖 **AI Agent Instructions**
+* **AI Agent Instructions**
 
   * PM agent
   * Reviewer agent
   * Risk analyst agent
   * Reporting agent
 
-* ⚙️ **Workflows**
+* **Workflows**
 
   * Spec → Plan → Execution → Validation
   * AI-assisted task generation
   * Continuous reporting
 
-* 🧩 **Profiles (optional)**
+* **Profiles (optional)**
 
   * Company-specific customization
   * Industry-specific extensions
 
 ---
 
-## 🏗️ Repository Structure
+## Repository Structure
 
 ```text
 spec-kit-pm/
@@ -92,7 +92,7 @@ spec-kit-pm/
 
 ---
 
-## ⚡ Get Started
+## Get Started
 
 ### 1. Install the Specpm CLI
 
@@ -254,7 +254,7 @@ Use **`/specpm.report`** to generate stakeholder-ready progress reports, then lo
 
 ---
 
-## 🧩 Profiles (Company Customization)
+## Profiles (Company Customization)
 
 You can extend **spec-kit-pm** with company-specific profiles:
 
@@ -278,7 +278,7 @@ Use profiles to define:
 
 ---
 
-## 🔄 Upstream & Fork Model
+## Upstream & Fork Model
 
 Recommended setup:
 
@@ -297,7 +297,7 @@ git rebase upstream/main
 
 ---
 
-## 🧠 How It Fits in AI Projects
+## How It Fits in AI Projects
 
 Traditional PM:
 
@@ -311,11 +311,11 @@ spec-kit-pm:
 * AI-generated plans
 * decision governance
 
-👉 The PM becomes a **context architect and decision maker**
+The PM becomes a **context architect and decision maker**
 
 ---
 
-## 📈 Example Workflow
+## Example Workflow
 
 ```text
 0. Initiation gate — Charter signed off (once per project)
@@ -331,7 +331,7 @@ spec-kit-pm:
 
 ---
 
-## ⚠️ Non-Goals
+## Non-Goals
 
 * ❌ Not a task management tool
 * ❌ Not a replacement for Jira / Azure DevOps
@@ -341,7 +341,7 @@ It is a **specification layer above your tools**.
 
 ---
 
-## 🧭 Roadmap
+## Roadmap
 
 * [ ] First template set (project spec, decision log, risk register)
 * [ ] Initial AI agent instructions (PM, reviewer)
@@ -355,7 +355,7 @@ It is a **specification layer above your tools**.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome:
 
@@ -366,12 +366,12 @@ Contributions are welcome:
 
 ---
 
-## 📄 License
+## License
 
 [MIT](LICENSE) © 2026 CassandraGargoyle Team
 
 ---
 
-## 💡 Vision
+## Vision
 
 > Replace task-driven project management with **context-driven, AI-orchestrated execution**.
