@@ -33,18 +33,41 @@ All **persisted** content — Markdown, file names, commit messages, agent promp
 
 - Conform to the rules in `.markdownlint.jsonc` and `.markdownlint-cli2.jsonc`
 - Lint with `markdownlint-cli2` before committing if you have it installed locally
-- One H1 per file; use ATX headings (`#`, `##`, …); ordered lists use sequential numbering (`1.`, `1.`, `1.` rendered as `1, 2, 3` per MD029 config)
+- One H1 per file; use ATX headings (`#`, `##`, …); ordered lists use literal sequential numbering (`1.`, `2.`, `3.`) per MD029 `style: ordered`. Do **not** use the all-`1.` shorthand — the linter rejects it.
+- Tables use spaces around pipes (`| Field | Value |`) per MD060.
 
 ### Diagrams
 
 - **Gantt charts MUST be authored in Mermaid.** See [`templates/roadmap/gantt.md`](templates/roadmap/gantt.md) for the full specification, required elements, and template. Image exports from MS Project / GanttProject / spreadsheet screenshots are explicitly forbidden.
 - For other diagram types prefer Mermaid (<https://mermaid.js.org/>) where it is expressive enough; fall back to PlantUML or D2 only when Mermaid cannot represent the diagram.
 
-### File Layout
+### Kit file layout
 
 - One template / agent / workflow per Markdown file
 - File names use `kebab-case.md`
 - A subdirectory's `.gitkeep` may be removed once a real file replaces the placeholder
+
+### Per-project artifact layout
+
+This is the layout adopting projects MUST use for their own artifacts (the kit itself does not host project artifacts):
+
+```text
+specs/project/<project-id>/
+  project.md       # the Charter (instance of templates/project/charter.md) — REQUIRED
+  gantt.md         # AI Plan output (Mermaid)
+  risks.md         # AI Plan output
+  kpis.md          # AI Plan output
+  decisions.md     # ADR-style decision log
+  execution/       # per-milestone sub-acceptance protocols
+  validation/      # acceptance test reports
+```
+
+Rules:
+
+- The filename `project.md` is **reserved** for the Charter and is the sole file the [PM agent preflight](agents/pm.md) looks for.
+- `<project-id>` is allocated per the adopting org's rule (not prescribed by the kit). Default suggestion: `<ORG>-<YYYY>-<NNN>` or contract-derived.
+- No planning artifact (Gantt, risks, KPIs, decisions, status reports) MAY be produced for a project until `project.md` exists, has `status: active`, and names exactly one Project Manager — see the [Initiation gate workflow](workflows/project-initiation.md) and the [Charter template](templates/project/charter.md).
+- The previous single-file convention `specs/project/<project-name>.md` is superseded.
 
 ### TODO Markers
 

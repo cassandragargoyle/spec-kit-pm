@@ -7,8 +7,8 @@ How a project specification is transformed into an actionable plan (tasks, risks
 ## Steps
 
 1. TBD
-1. TBD
-1. TBD
+2. TBD
+3. TBD
 
 ## Inputs
 
