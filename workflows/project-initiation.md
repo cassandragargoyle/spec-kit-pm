@@ -10,11 +10,11 @@ This workflow precedes the iterative loop:
                        └────────────────────────────────────────────────────┘
 ```
 
-The Initiation gate is enforced mechanically by the [PM agent preflight](../agents/pm.md): if `<artifact_directory>/project.md` does not exist, has `status` other than `active`, or does not name exactly one Project Manager with email, the agent MUST refuse to produce planning artifacts and instead produce a Charter draft.
+The Initiation gate is enforced mechanically by the [PM agent preflight](../agents/pm.md): if `<artifact_directory>/project.md` does not exist, has `status` other than `active`, does not name exactly one Project Manager with email, or lacks a valid `authoring_party` (`customer`, `supplier`, `internal`, `joint`), the agent MUST refuse to produce planning artifacts and instead produce a Charter draft.
 
 ## Steps
 
-1. **Identify source authority.** Locate the contract, mandate, or formal decision that establishes the project. Capture the reference verbatim — it goes into the Charter's `source_authority` field.
+1. **Identify source authority.** Locate the contract, mandate, or formal decision that establishes the project. Capture the reference verbatim — it goes into the Charter's `source_authority` field. **Then record which Party this Charter is authored from in the front-matter `authoring_party` field** (`customer`, `supplier`, `internal`, or `joint`). Sponsor (step 5) and Project Manager (step 4) SHOULD be drawn from that Party.
 2. **Allocate a Project ID.** Per the adopting org's naming rule (default suggestion: `<ORG>-<YYYY>-<NNN>` or contract-derived). The ID MUST be stable and unique within the org.
 3. **Draft the Charter.** Copy [`templates/project/charter.md`](../templates/project/charter.md) to `specs/project/<project-id>/project.md`. Fill mandatory fields. Set `status: draft`.
 4. **Assign a single named Project Manager.** Exactly one person with an email. OPTIONALLY assign a Deputy for unavailability cover (not a co-owner).
@@ -42,6 +42,7 @@ The Initiation gate is enforced mechanically by the [PM agent preflight](../agen
 | No named Project Manager | Refuse to set `status: active`. Ask for one named person with email. |
 | Multiple Project Managers proposed | Refuse. Ask which one is the PM and (optionally) which is the Deputy. |
 | Sponsor not identifiable | Refuse to set `status: active`. Ask. |
+| `authoring_party` missing or invalid | Refuse to set `status: active`. Ask which Party (`customer` / `supplier` / `internal` / `joint`) is authoring this Charter. The agent SHOULD attempt inference from the source authority and any available user-identity record before asking. |
 
 The agent never silently invents any of these.
 
@@ -49,4 +50,6 @@ The agent never silently invents any of these.
 
 - Charter template: [`templates/project/charter.md`](../templates/project/charter.md)
 - PM agent preflight: [`agents/pm.md`](../agents/pm.md)
-- Origin specification: `spec-kit-pm-playground/docs/issues/internal/001-project-initiation-gate.md`
+- Origin specifications:
+  - `spec-kit-pm-playground/docs/issues/internal/001-project-initiation-gate.md`
+  - `spec-kit-pm-playground/docs/issues/internal/002-authoring-party-gate.md`

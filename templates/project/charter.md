@@ -27,6 +27,7 @@ The Charter is the **Initiation gate** for every project. It is enforced by the 
 | `deputy` | no | object | `{ name, email }`. Optional cover during PM unavailability; not a co-owner. |
 | `sponsor` | yes | string | Person or entity authorising the work. |
 | `source_authority` | yes | string | Reference to contract, mandate, or formal decision establishing the project. |
+| `authoring_party` | yes | enum | One of `customer`, `supplier`, `internal`, `joint`. Identifies which side of the `source_authority` is authoring this Charter. For single-organisation projects (no counterparty) use `internal`. |
 | `created` | yes | ISO date | `YYYY-MM-DD`. |
 | `updated` | yes | ISO date | `YYYY-MM-DD`. Bumped on every Charter edit. |
 | `artifact_directory` | yes | string | Repo-relative path. By convention `specs/project/<project_id>/`. |
@@ -46,6 +47,8 @@ Optional but recommended:
 - **Risks summary** — top 3-5 risks (the full register lives in `risks.md`).
 - **Open questions** — for sponsor sign-off.
 
+**Stakeholders convention.** When `authoring_party` is `customer` or `supplier`, the Stakeholders table MUST clearly distinguish "our Party" (the authoring Party) from the counterparty — typically by adding a `Side` column or by grouping rows by side. Sponsor and Project Manager SHOULD be drawn from the authoring Party; the kit does not enforce this mechanically, but Charters that violate the convention SHOULD be flagged for review.
+
 ## Template
 
 Copy the block below into `specs/project/<project-id>/project.md` and fill in.
@@ -63,6 +66,7 @@ deputy:
   email: <Optional name@example.com>
 sponsor: <Person or entity authorising the work>
 source_authority: <Contract / mandate / decision reference>
+authoring_party: <internal | customer | supplier | joint>
 created: <YYYY-MM-DD>
 updated: <YYYY-MM-DD>
 artifact_directory: specs/project/<project-id>/
@@ -101,6 +105,9 @@ artifact_directory: specs/project/<project-id>/
 
 ## Stakeholders
 
+<!-- If `authoring_party` is `customer` or `supplier`, add a `Side` column distinguishing
+     "our Party" (the authoring Party) from the counterparty. -->
+
 |Name|Role|Contact|
 |---|---|---|
 |<…>|<Sponsor>|<…>|
@@ -111,7 +118,9 @@ artifact_directory: specs/project/<project-id>/
 - <Question pending sponsor sign-off>
 ````
 
-## Rendered Example
+## Rendered Examples
+
+### Internal-side (single organisation)
 
 ```markdown
 ---
@@ -123,6 +132,7 @@ project_manager:
   email: jane.doe@acme.example
 sponsor: Acme VP of Customer Success
 source_authority: 2026 OKR commitment, board minutes 2026-Q1
+authoring_party: internal
 created: 2026-04-15
 updated: 2026-04-30
 artifact_directory: specs/project/ACME-2026-001/
@@ -162,9 +172,75 @@ Cut time-to-first-value for new B2B customers from 14 days to under 3 days by 20
 - Zero regressions in existing self-service signup conversion rate
 ```
 
+### Customer-side (bilateral contract)
+
+A Charter authored by the **customer** Party of a signed installation contract. Note `authoring_party: customer` and the `Side` column in the Stakeholders table distinguishing "our Party" from the counterparty.
+
+```markdown
+---
+project_id: ACME-2026-007
+title: Smart Home Installation — Acceptance & Commissioning
+status: active
+project_manager:
+  name: Pat Customer
+  email: pat@homeowner.example
+sponsor: John Doe (Homeowner)
+source_authority: Smart Home Installation Contract, signed 2026-04-10 (Acme Smart Living ↔ John Doe)
+authoring_party: customer
+created: 2026-04-15
+updated: 2026-04-30
+artifact_directory: specs/project/ACME-2026-007/
+---
+
+# Smart Home Installation — Acceptance & Commissioning
+
+## Goal
+
+Take delivery of the contracted smart-home system, run acceptance tests, and sign off within 30 days of physical install.
+
+## Scope
+
+### In scope
+
+- Acceptance testing of installed devices against the contracted feature list
+- Verification of integration with the homeowner's existing Wi-Fi and broadband
+- Final sign-off and warranty activation
+
+### Out of scope
+
+- Installation labour (supplier responsibility)
+- Hardware procurement (supplier responsibility)
+- Post-warranty servicing (separate contract)
+
+## Constraints
+
+- **Budget:** EUR 0 additional (covered by signed contract)
+- **Deadline:** 2026-06-30 (30 days post-install)
+- **Regulatory:** none beyond the contract's CE-marking attestations
+- **Personnel:** 1 acceptance lead (homeowner side); supplier provides commissioning engineer
+- **Technical:** must integrate with homeowner's existing network without re-cabling
+
+## Success criteria
+
+- All contracted devices pass acceptance tests
+- Defects within the contract's tolerance band
+- Warranty registration confirmed in writing by the supplier
+
+## Stakeholders
+
+| Side | Name | Role | Contact |
+| --- | --- | --- | --- |
+| Customer (our Party) | John Doe | Sponsor | john@homeowner.example |
+| Customer (our Party) | Pat Customer | Project Manager | pat@homeowner.example |
+| Supplier (counterparty) | Acme Smart Living | Contractor | contracts@acme-smart.example |
+| Supplier (counterparty) | Alex Engineer | Commissioning lead | alex@acme-smart.example |
+```
+
 ## References
 
 - PM agent preflight (enforcement): [`agents/pm.md`](../../agents/pm.md)
 - Project initiation workflow: [`workflows/project-initiation.md`](../../workflows/project-initiation.md)
 - Per-project directory convention: see [`CLAUDE.md`](../../CLAUDE.md) → *Per-project artifact layout*
-- Origin specification: `spec-kit-pm-playground/docs/issues/internal/001-project-initiation-gate.md`
+- Origin specifications:
+  - `spec-kit-pm-playground/docs/issues/internal/001-project-initiation-gate.md`
+  - `spec-kit-pm-playground/docs/issues/internal/002-authoring-party-gate.md`

@@ -16,6 +16,7 @@ Before producing any planning artifact (Gantt chart, risk register, KPI sheet, s
 1. The artifact directory contains `project.md` (the Project Charter), at the path stated by the user or — by convention — `specs/project/<project_id>/project.md`.
 2. Its YAML front-matter `status` is `active`. (Values `draft`, `paused`, or `closed` MUST cause a refusal.)
 3. Its YAML front-matter `project_manager` names exactly one person with an email.
+4. Its YAML front-matter `authoring_party` is present and is one of `customer`, `supplier`, `internal`, or `joint`.
 
 If any of these conditions is not satisfied, **stop** producing the requested artifact. Instead:
 
@@ -23,7 +24,15 @@ If any of these conditions is not satisfied, **stop** producing the requested ar
 2. Mark each missing field with `<<TO FILL>>`.
 3. Ask the requester for the missing information before continuing.
 
-You MUST NOT silently invent a Project ID, Project Manager, Sponsor, source authority, or artifact directory. The Initiation gate exists precisely to prevent that failure mode.
+For check (4) specifically, before asking the agent SHOULD attempt inference:
+
+- If `source_authority` unambiguously names a single organisation with no counterparty (e.g. an internal OKR, board minutes of the authoring org), the agent MAY auto-fill `authoring_party: internal`.
+- If a user-identity record is available and the user's organisation matches exactly one named Party of `source_authority`, the agent MAY auto-fill the corresponding value (`customer` or `supplier`) and SHOULD record a visible inference marker so a human reviewer can confirm it.
+- Otherwise — and especially when `source_authority` names two or more distinct Parties and inference is unavailable or ambiguous — the agent MUST ask which Party (`customer`, `supplier`, `internal`, `joint`) is authoring this Charter.
+
+You MUST NOT silently invent a Project ID, Project Manager, Sponsor, source authority, authoring party, or artifact directory. The Initiation gate exists precisely to prevent that failure mode.
+
+**Sponsor and Project Manager SHOULD be drawn from the authoring Party.** The kit does not enforce this mechanically because it has no parseable representation of which Party each person belongs to; the convention is observed in the Charter body (Stakeholders section) and reviewed by humans. Charters that violate it SHOULD be flagged for review.
 
 See [`workflows/project-initiation.md`](../workflows/project-initiation.md) for the full Initiation workflow.
 
