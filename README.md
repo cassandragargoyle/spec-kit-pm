@@ -2,7 +2,9 @@
 
 **AI-native project management specification kit for defining context, decisions, workflows, and validation in modern projects.**
 
-> **Status:** early stage. The repository structure (templates, agents, workflows, profiles, examples) is in place as skeletons — concrete templates and agent prompts are still to be filled in. See [Roadmap](#-roadmap).
+> **Part of [Portunix](https://github.com/cassandragargoyle/portunix).** The kit is consumed by the `portunix specpm` subcommand — the executable surface (`portunix specpm init`, `portunix specpm check`, …) lives in the Portunix repository; this repository is the source of the templates, agent instructions, and workflows the subcommand uses.
+>
+> **Status:** early stage. The repository structure (templates, agents, workflows, profiles, examples) is in place as skeletons — concrete templates and agent prompts are still to be filled in. See [Roadmap](#roadmap).
 
 ---
 
@@ -94,80 +96,45 @@ spec-kit-pm/
 
 ## Get Started
 
-### 1. Install the Specpm CLI
+### 1. Install Portunix (which ships `specpm`)
 
-> **Status:** the `specpm` CLI is **planned** — see [Roadmap](#-roadmap). The commands in this section are the **specified UX** that will work once the CLI ships. Until then, use *Option 3: Manual setup* below.
+> **Status:** the `portunix specpm` subcommand is **planned** — see [Roadmap](#roadmap). The commands in this section are the **specified UX** that will work once the subcommand ships. Until then, use *Option 2: Manual setup* below.
 >
-> **Important:** the only official, maintained packages for spec-kit-pm are published from this GitHub repository. Always install directly from GitHub as shown below.
+> **Important:** there is no standalone `specpm` binary. The PM tooling is delivered exclusively as a Portunix subcommand. Templates, agent instructions, and workflows live in this repository; the executable surface lives in [Portunix](https://github.com/cassandragargoyle/portunix).
 
 Choose your preferred installation method:
 
-#### Option 1: Persistent installation (recommended)
+#### Option 1: Install Portunix (recommended)
 
-Install once and use everywhere. Pin a specific release tag for stability (check [Releases](https://github.com/CassandraGargoyle/spec-kit-pm/releases) for the latest):
+Install Portunix from its official release artefacts (see the [Portunix Quick Install](https://github.com/cassandragargoyle/portunix#quick-install) section for the latest version, supported platforms, and offline / air-gapped install path). After installation, `portunix specpm` is available immediately — there is nothing extra to install for the PM tooling.
 
-```bash
-# Install a specific stable release (recommended — replace vX.Y.Z with the latest tag)
-uv tool install specpm-cli --from git+https://github.com/CassandraGargoyle/spec-kit-pm.git@vX.Y.Z
-
-# Or install latest from main (may include unreleased changes)
-uv tool install specpm-cli --from git+https://github.com/CassandraGargoyle/spec-kit-pm.git
-
-# Alternative: using pipx
-pipx install git+https://github.com/CassandraGargoyle/spec-kit-pm.git@vX.Y.Z
-pipx install git+https://github.com/CassandraGargoyle/spec-kit-pm.git
-```
-
-Verify the installed version:
+Verify:
 
 ```bash
-specpm version
+portunix version
+portunix specpm version
 ```
 
 Use the tool:
 
 ```bash
 # Create a new project
-specpm init <PROJECT_NAME>
+portunix specpm init <PROJECT_NAME>
 
 # Or initialize inside an existing repo
-specpm init . --agent claude
+portunix specpm init . --agent claude
 # or
-specpm init --here --agent claude
+portunix specpm init --here --agent claude
 
 # Inspect detected agents and templates
-specpm check
+portunix specpm check
 ```
 
-Upgrade:
+Upgrade by upgrading Portunix itself (follow the upgrade instructions in the Portunix README).
 
-```bash
-uv tool install specpm-cli --force --from git+https://github.com/CassandraGargoyle/spec-kit-pm.git@vX.Y.Z
-# pipx users:
-pipx install --force git+https://github.com/CassandraGargoyle/spec-kit-pm.git@vX.Y.Z
-```
+#### Option 2: Manual setup (works today)
 
-#### Option 2: One-time usage
-
-Run directly without installing:
-
-```bash
-# Create a new project (pinned to a stable release — replace vX.Y.Z with the latest tag)
-uvx --from git+https://github.com/CassandraGargoyle/spec-kit-pm.git@vX.Y.Z specpm init <PROJECT_NAME>
-
-# Or initialize in an existing project
-uvx --from git+https://github.com/CassandraGargoyle/spec-kit-pm.git@vX.Y.Z specpm init . --agent claude
-```
-
-**Benefits of persistent installation:**
-
-* Tool stays available in PATH
-* No need for shell aliases
-* Easier management with `uv tool list`, `uv tool upgrade`, `uv tool uninstall`
-
-#### Option 3: Manual setup (works today)
-
-While the CLI is in development, vendor the kit directly into your repo:
+While the `portunix specpm` subcommand is in development, vendor the kit directly into your repo and drive it from your AI agent:
 
 ```bash
 # As a git submodule (recommended — easy upstream sync)
@@ -179,9 +146,9 @@ git clone --depth 1 https://github.com/CassandraGargoyle/spec-kit-pm.git .pm-spe
 # Or simply copy the templates/, agents/, and workflows/ directories into your project
 ```
 
-#### Option 4: Enterprise / air-gapped installation
+#### Option 3: Enterprise / air-gapped installation
 
-For environments without access to PyPI or GitHub, build a portable wheel bundle on a connected machine using `pip download` against the `git+https://…` URL above and transfer it to the target host. (Detailed guide will land alongside the CLI release.)
+For environments without access to GitHub release artefacts, mirror Portunix's release bundle internally and install it from the mirror — see the Portunix README for the supported air-gapped / offline install path. There is no separate air-gapped channel for the kit; bundling Portunix bundles `specpm` with it.
 
 ---
 
@@ -349,13 +316,12 @@ It is a **specification layer above your tools**.
 
 * [ ] First template set (project spec, decision log, risk register)
 * [ ] Initial AI agent instructions (PM, reviewer)
-* [ ] `specpm` CLI — `uv tool install` / `pipx` / `uvx` install paths, `init` / `check` / `version` subcommands (see [Get Started](#-get-started))
+* [ ] `portunix specpm` subcommand in [Portunix](https://github.com/cassandragargoyle/portunix) — `init` / `check` / `version` actions (see [Get Started](#get-started))
 * [ ] Slash-command bundles (`/specpm.spec`, `/specpm.plan`, `/specpm.risks`, `/specpm.review`, `/specpm.report`) for Claude Code, Copilot, and other agents
-* [ ] Air-gapped install bundle (`pip download` recipe)
 * [ ] AI-native validation pipelines
 * [ ] Integration with [github/spec-kit](https://github.com/github/spec-kit) (dev companion)
 * [ ] Multi-agent orchestration
-* [ ] Synapse / Portunix integration
+* [ ] Synapse integration
 
 ---
 

@@ -8,6 +8,7 @@
 - **Repository Type**: Documentation and specifications (Markdown only). No application code, no build system, no test suite.
 - **Project Stage**: Early planning. The repository structure exists as skeletons; concrete templates, agent prompts, and workflows are still to be authored. Backwards compatibility is not a concern — restructure freely.
 - **License**: MIT (see [LICENSE](LICENSE))
+- **Distribution**: Part of the [Portunix](https://github.com/cassandragargoyle/portunix) platform. The CLI surface is the `portunix specpm` subcommand (implemented in the Portunix repo, in Go). This repository is the canonical source of the templates, agent instructions, and workflows that subcommand consumes; there is no standalone `specpm` binary.
 
 ## Repository Structure
 
